@@ -95,9 +95,9 @@ class EMCO_USBhv:
         status = {}
         print(f'Status response: {response}')
         status['enabled'] = response[0] == 0x80
-        status['set_voltage'] = (response[2] << 8) | response[1]
-        status['voltage_monitor1'] = (response[4] << 8) | response[3]
-        status['voltage_monitor2'] = (response[6] << 8) | response[5]
+        status['set_voltage'] = ((response[1] << 8) | response[2]) / 2.0
+        status['voltage_monitor1'] = ((response[3] << 8) | response[4]) / 2.0
+        status['voltage_monitor2'] = ((response[5] << 8) | response[6]) / 2.0
         return status
     
     # create properties for the power supply
