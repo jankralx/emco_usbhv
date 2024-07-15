@@ -73,119 +73,74 @@ class EMCO_USBhv:
         command = [0x01, voltage_low_byte, voltage_high_byte, 0x00, 0x00, 0x0f, 0xff, 0x09]
         self.write_data(command)
         response = self.read_data(8)
-        print(f'Set voltage to {voltage} V (binary: 0x{v:04x}), response: {response}')
+        #print(f'Set voltage to {voltage} V (binary: 0x{v:04x}), response: {response}')
         
 
-    def enable_output(self):
+    def enable(self):
         command = [0x02, 0x80, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
         self.write_data(command)
         response = self.read_data(8)
-        print(f'Enabled output, response: {response}')
+        #print(f'Enabled output, response: {response}')
 
-    def disable_output(self):
+    def disable(self):
         command = [0x02, 0x00, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
         self.write_data(command)
         response = self.read_data(8)
-        print(f'Disabled output, response: {response}')
+        #print(f'Disabled output, response: {response}')
 
-    def get_status(self):
+    def status(self):
         command = [0x03, 0x00, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
         self.write_data(command)
         response = self.read_data(8)
         status = {}
-        print(f'Status response: {response}')
+        #print(f'Status response: {response}')
         status['enabled'] = response[0] == 0x80
         status['set_voltage'] = ((response[1] << 8) | response[2]) / 2.0
         status['voltage_monitor1'] = ((response[3] << 8) | response[4]) / 2.0
         status['voltage_monitor2'] = ((response[5] << 8) | response[6]) / 2.0
         return status
-    
-    # create properties for the power supply
-    @property
-    def voltage(self):
-        return self._set_voltage
-    
-    @voltage.setter
-    def voltage(self, value):
-        self._set_voltage = value
-        voltage_high_byte = (value >> 8) & 0xFF
-        voltage_low_byte = value & 0xFF
-        command = [0x01, voltage_low_byte, voltage_high_byte, 0x00, 0x00, 0x0f, 0xff, 0x09]
-        self.write_data(command)
 
-if 0:
+    # set voltage directly by calling the object with the voltage value
+    def __call__(self, voltage):
+        self.set_voltage(voltage)
+ 
 
-    # Open the device
-    device = hid.device()
-    device.open(VENDOR_ID, PRODUCT_ID)
+if __name__ == '__main__':
+    import time
 
-    # Print device info
-    print(f'Manufacturer: {device.get_manufacturer_string()}')
-    print(f'Product: {device.get_product_string()}')
-    print(f'Serial Number: {device.get_serial_number_string()}')
+    # create an object of the class
+    hv = EMCO_USBhv()
 
-    # Command to set voltage (example, replace with actual command)
-    # Assuming the command to set voltage is [0x01, 0x02, voltage_high_byte, voltage_low_byte]
-    voltage = 500  # 500V, example value
-    voltage_high_byte = (voltage >> 8) & 0xFF
-    voltage_low_byte = voltage & 0xFF
+    # set the voltage to 500 V
+    hv.set_voltage(500)
 
-    # set voltage
-    command = [0x00, 0x01, 0xff, 0x03, 0, 0, 0x0f, 0xff, 0x09]
+    # enable the output
+    hv.enable()
 
-    # Send command to the device
-    write_data(device, command)
+    # get the status
+    time.sleep(0.3)
+    print(f'Status after setting 500 V and enabled: {hv.status()}')
 
-    # Read response from the device
-    response = read_data(device, 8)  # Adjust length as needed
-    print('Response:', response)
+    # disable the output
+    hv.disable()
 
-    # reset command
-    command = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0x09]
+    # get the status
+    time.sleep(0.3)
+    print(f'Status after disabling: {hv.status()}')
 
-    # enable output
-    command = [0x00, 0x02, 0x80, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
-    # disable output
-    #command = [0x00, 0x02, 0x00, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
+    # set the voltage to 1000 V
+    hv(1000)
 
+    # enable the output
+    hv.enable()
 
+    # get the status
+    time.sleep(0.3)
+    print(f'Status after setting 1000 V and enabled: {hv.status()}')
 
-    # Send command to the device
-    write_data(device, command)
+    # disable the output
+    hv.disable()
 
-    # Read response from the device
-    response = read_data(device, 8)  # Adjust length as needed
-    print('Response:', response)
-
-
-
-    # request status
-    command = [0x00, 0x03, 0x00, 0xcc, 0x00, 0x00, 0x0f, 0xff, 0x09]
-
-    # Send command to the device
-    write_data(device, command)
-
-    # Read response from the device
-    response = read_data(device, 8)  # Adjust length as needed
-    print('Response:', response)
-
-    # 500 V requested
-    # 496 V measured - enabled
-    # 80 03 ff 03 f8 03 f8 09
-
-    # some time after disabling the output voltage
-    # 00 03 ff 03 b9 02 83 09
-
-    # long time after disabling the output voltage
-    # 00 03 f8 01 7f 0f ff 09
-
-    # response contains actual set voltage
-    # and measured voltage
-    # first byte is 80 if enabled
-    # 2B - set voltage: big endian
-    # 2B - measured voltage 1: big endian
-    # 2B - measured voltage 2: big endian
-
-
-    # Close the device
-    device.close()
+    # get the status
+    time.sleep(0.3)
+    print(f'Status after disabling: {hv.status()}')
