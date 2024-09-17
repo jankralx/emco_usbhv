@@ -67,6 +67,9 @@ class EMCO_USBhv:
         return self.device.read(length)
     
     def set_voltage(self, voltage):
+        if voltage < 0 or voltage >= 2048:
+            raise Exception('Voltage must be between 0 and 2000 V')
+        
         v = voltage * 2
         voltage_high_byte = (v >> 8) & 0xFF
         voltage_low_byte = v & 0xFF
