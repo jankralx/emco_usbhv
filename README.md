@@ -2,6 +2,8 @@
 
 This is a Python module to control the EMCO USB_HV power module via the HID API. The module is based on the reverse engineering of the USB protocol used by the EMCO USBhv Series control software. It was tested with USB20N power module.
 
+![Photo of HV power supply USB20N](./emco_usbhv_photo.jpg)
+
 ## Installation
 
 TBD
