@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from emco_usbhv.emco_usbhv import EMCO_USBhv
+from emco_usbhv import EMCO_USBhv
 import time
 
 
@@ -111,7 +111,7 @@ class EMCO_USBhv_App(tk.Tk):
                 self.enable_button.config(state="disabled")
                 self.disable_button.config(state="normal")
             else:
-                self.status_label.config(text="Disabled", bg="green")
+                self.status_label.config(text="Disabled", bg="gray")
                 self.enable_button.config(state="normal")
                 self.disable_button.config(state="disabled")
 

@@ -1,9 +1,5 @@
 import hid
 
-# Vendor ID and Product ID of the device (USB20N)
-VENDOR_ID = 0x03eb
-# PRODUCT_ID = 0x201d
-
 # Captured commands and responses from the device
 # reset
 # 00 00 00 00 00 0f ff 09
@@ -31,12 +27,16 @@ VENDOR_ID = 0x03eb
 # therefore, I would recommend to calibrate your module with a multimeter
 
 class EMCO_USBhv:
+    # Vendor ID and Product ID of the device (USB20N)
+    C_VENDOR_ID = 0x03eb
+    # C_PRODUCT_ID = 0x201d
+
     # create a function which will list all available device's IDs correspoding to the vendor ID
     @staticmethod
     def list_devices():
         devices = hid.enumerate()
-        return [(device['vendor_id'], device['product_id']) for device in devices if device['vendor_id'] == VENDOR_ID]
-        
+        return [(device['vendor_id'], device['product_id']) for device in devices if device['vendor_id'] == EMCO_USBhv.C_VENDOR_ID]
+    
     # constructor
     def __init__(self, vendor_id=None, product_id=None):
         self.vendor_id = vendor_id
@@ -50,7 +50,7 @@ class EMCO_USBhv:
             if len(devices) > 1:
                 raise Exception('Multiple EMCO USBhv devices found, specify the vendor_id and product_id')
             self.vendor_id, self.product_id = devices[0]
-
+        
         self.device = hid.device()
         self.device.open(self.vendor_id, self.product_id)
 

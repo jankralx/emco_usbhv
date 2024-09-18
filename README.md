@@ -11,10 +11,12 @@ TBD
 On Linux remember to set correct permissions for the USB device. You can do it by creating a udev rule. Create a file `/etc/udev/rules.d/99-emco-usbhv.rules` with the following content:
 ```bash
 SUBSYSTEM=="usb", ATTR{idVendor}=="03eb", ATTR{idProduct}=="201d", MODE="0666"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="201d", MODE="0666"
 ```
 or simply run the following command:
 ```bash
 echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="03eb", ATTR{idProduct}=="201d", MODE="0666"' | sudo tee /etc/udev/rules.d/99-emco-usbhv.rules
+echo 'SUBSYSTEM=="hidraw", ATTR{idVendor}=="03eb", ATTR{idProduct}=="201d", MODE="0666"' | sudo tee -a /etc/udev/rules.d/99-emco-usbhv.rules
 ```
 Then reload the udev rules:
 ```bash
@@ -37,4 +39,4 @@ The module also includes a simple GUI application to control the EMCO USB_HV pow
 
 Run the application with the following command:
 ```bash
-python -m emco_usbhv
+python emco_usbhv_app.py

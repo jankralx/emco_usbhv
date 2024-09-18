@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "emco_usbhv"
+version = "0.1.0"
+description = "A package for controlling EMCO USB HV power supply."
+readme = "README.md"
+dependencies = [
+    "hidapi"
+]
+authors = [
+    { name = "Jan Kral", email = "jankralx@gmail.com" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.urls]
+homepage = "https://github.com/jankralx/emco_usbhv"
+
+[tool.setuptools.packages.find]
+where = ["emco_usbhv"]
