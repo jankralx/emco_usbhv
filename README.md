@@ -6,7 +6,11 @@ This is a Python module to control the EMCO USB_HV power module via the HID API.
 
 ## Installation
 
-TBD
+Install with
+
+    pip install .
+
+### Permissions
 
 On Linux remember to set correct permissions for the USB device. You can do it by creating a udev rule. Create a file `/etc/udev/rules.d/99-emco-usbhv.rules` with the following content:
 ```bash
@@ -24,14 +28,13 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 
+Note:
+The first line is required when hidapi < x.x.x is used (e.g. required for hidapi == 0.9.0.post3).
+The second line is required when hidapi >= x.x.x is used (e.g. required for hidapi == 0.14.0.post2).
+
 ## Usage
 
-```python
-import emco_usbhv
-
-# TBD ...
-
-```
+See `if __name__ == '__main__'` block in [emco_usbhv/emco_usbhv.py]([emco_usbhv/emco_usbhv.py]).
 
 ## GUI Application
 
