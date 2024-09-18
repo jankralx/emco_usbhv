@@ -34,7 +34,7 @@ The second line is required when hidapi >= x.x.x is used (e.g. required for hida
 
 ## Usage
 
-See `if __name__ == '__main__'` block in [emco_usbhv/emco_usbhv.py]([emco_usbhv/emco_usbhv.py]).
+See `if __name__ == '__main__'` block in [emco_usbhv/emco_usbhv.py](emco_usbhv/emco_usbhv.py).
 
 ## GUI Application
 
